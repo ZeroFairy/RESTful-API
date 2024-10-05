@@ -23,7 +23,7 @@ function searchMovie() {
                                 <div class="card-body">
                                     <h5 class="card-title">`+data.Title+`</h5>
                                     <h6 class="card-subtitle mb-2 text-body-secondary">` +data.Year+ `</h6>
-                                    <a href="#" class="card-link see-detail" data-toggle="modal" data-target="#exampleModal" data-id="`+data.imdbID+`">See Detail</a>
+                                    <a href="#" class="card-link see-detail" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="` +data.imdbID+ `">See Detail</a>
                                 </div>
                             </div>
                         </div>
@@ -55,40 +55,47 @@ $('#search-input').on('keyup', function(e) {
 
 // event binding 
 $('#movie-list').on('click', '.see-detail', function () { 
-    console.log(movie.title);
     $.ajax({
         url: 'http://www.omdbapi.com',
         type: 'get',
         dataType: 'json',
         data: {
             'apikey': 'fd55cb8a',
-            'i': $('this').data('id')
+            'i': $(this).data('id')
         },
         success: function (movie) {
+            console.log(movie.Title);
             if (movie.Response === "True") {
                 $('.modal-body').html(`
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-4">
-                                <img src"`+movie.Poster+`" class="img-fluid">
+                                <img src="`+movie.Poster+`" class="img-fluid">
                             </div>
 
                             <div class="col-md-8">
                                 <h3>`+movie.Title+`</h3>
 
-                                <ul class="list-group col-md-2">
-                                    <li class="list-group-item">Released :</li>
-                                    <li class="list-group-item">Genre : </li>
-                                    <li class="list-group-item">Director : </li>
-                                    <li class="list-group-item">Actors : </li>
-                                </ul>
-
-                                <ul class="list-group col-md-6">
-                                    <li class="list-group-item">`+movie.Released+`</li>
-                                    <li class="list-group-item">`+movie.Genre+`</li>
-                                    <li class="list-group-item">`+movie.Director+`</li>
-                                    <li class="list-group-item">`+movie.Actors+`</li>
-                                </ul>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Released</th>
+                                            <td>`+movie.Released+`</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Genre</th>
+                                            <td>`+movie.Genre+`</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Director</th>
+                                            <td>`+movie.Director+`</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Actors</th>
+                                            <td>`+movie.Actors+`</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -96,5 +103,49 @@ $('#movie-list').on('click', '.see-detail', function () {
             }
         }
     });
-
 });
+
+//Dari video
+// $('#movie-list').on('click', '.see-detail', function () { 
+//     $.ajax({
+//         url: 'http://www.omdbapi.com',
+//         type: 'get',
+//         dataType: 'json',
+//         data: {
+//             'apikey': 'fd55cb8a',
+//             'i': $(this).data('id')
+//         },
+//         success: function (movie) {
+//             console.log(movie.Title);
+//             if (movie.Response === "True") {
+//                 $('.modal-body').html(`
+//                     <div class="container-fluid">
+//                         <div class="row">
+//                             <div class="col-md-4">
+//                                 <img src="`+movie.Poster+`" class="img-fluid">
+//                             </div>
+
+//                             <div class="col-md-8">
+//                                 <h3>`+movie.Title+`</h3>
+
+//                                 <ul class="list-group col-md-2">
+//                                     <li class="list-group-item">Released : `+movie.Released+`</li>
+//                                     <li class="list-group-item">Genre : `+movie.Genre+`</li>
+//                                     <li class="list-group-item">Director : `+movie.Director+`</li>
+//                                     <li class="list-group-item">Actors : `+movie.Actors+`</li>
+//                                 </ul>
+
+//                                 <ul class="list-group col-md-6">
+//                                     <li class="list-group-item">`+movie.Released+`</li>
+//                                     <li class="list-group-item">`+movie.Genre+`</li>
+//                                     <li class="list-group-item">`+movie.Director+`</li>
+//                                     <li class="list-group-item">`+movie.Actors+`</li>
+//                                 </ul>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 `);
+//             }
+//         }
+//     });
+// });
