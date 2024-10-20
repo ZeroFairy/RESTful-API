@@ -29,9 +29,30 @@ class UserController extends ResourceController
      *
      * @return ResponseInterface
      */
-    public function show($id = null)
+    public function show($id = null, $password = null)
     {
-        //
+        $user = $this->model->select('nama, email, password')->find($id);
+
+        if ($user == null) {
+            return $this->FailNotFound('Data user not found');
+        }
+        
+        if (password_verify($password, $user['password'])) {
+            $data = [
+                'message' => 'success',
+                'user_name'  => $user['nama'],
+                'user_email'  => $user['email']
+            ];
+
+            return $this->respond($data,200);
+        } else {
+            $data = [
+                'message' => 'error'
+            ];
+            return $this ->respond($data,401);
+        }
+
+
     }
 
     /**
@@ -47,6 +68,9 @@ class UserController extends ResourceController
     /**
      * Create a new resource object, from "posted" parameters.
      *
+     * Data yang diinput adalah nama, email, password
+     * 
+     * Password yang diinput akan dilakukan encrypttion, setelah itu baru simpan dalam database
      * @return ResponseInterface
      */
     public function create()
@@ -71,7 +95,7 @@ class UserController extends ResourceController
         $this->model->insert([
             'nama' => esc($this->request->getVar('nama')),
             'email' => esc($this->request->getVar('email')),
-            'password' => esc($this->request->getVar('password'))
+            'password' => $hashedPassword
         ]);
 
         $response = [
