@@ -65,6 +65,9 @@ class UserController extends ResourceController
             return $this->failValidationErrors($response);
         }
 
+        $password = esc($this->request->getVar('password'));
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
         $this->model->insert([
             'nama' => esc($this->request->getVar('nama')),
             'email' => esc($this->request->getVar('email')),
